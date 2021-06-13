@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +36,9 @@ import net.fabricmc.loader.entrypoint.minecraft.EntrypointPatchFML125;
 import net.fabricmc.loader.entrypoint.minecraft.EntrypointPatchHook;
 import net.fabricmc.loader.launch.common.FabricLauncherBase;
 import net.fabricmc.loader.metadata.BuiltinModMetadata;
+import net.fabricmc.loader.metadata.ModDependencyImpl;
+import net.fabricmc.loader.minecraft.McVersion;
 import net.fabricmc.loader.minecraft.McVersionLookup;
-import net.fabricmc.loader.minecraft.McVersionLookup.McVersion;
 import net.fabricmc.loader.util.Arguments;
 import net.fabricmc.loader.util.SystemProperties;
 
@@ -66,12 +68,12 @@ public class MinecraftGameProvider implements GameProvider {
 
 	@Override
 	public String getRawGameVersion() {
-		return versionData.raw;
+		return versionData.getRaw();
 	}
 
 	@Override
 	public String getNormalizedGameVersion() {
-		return versionData.normalized;
+		return versionData.getNormalized();
 	}
 
 	@Override
@@ -84,11 +86,15 @@ public class MinecraftGameProvider implements GameProvider {
 			throw new RuntimeException(e);
 		}
 
-		return Arrays.asList(
-				new BuiltinMod(url, new BuiltinModMetadata.Builder(getGameId(), getNormalizedGameVersion())
-						.setName(getGameName())
-						.build())
-				);
+		BuiltinModMetadata.Builder metadata = new BuiltinModMetadata.Builder(getGameId(), getNormalizedGameVersion())
+				.setName(getGameName());
+
+		if (versionData.getClassVersion().isPresent()) {
+			int version = versionData.getClassVersion().getAsInt() - 44;
+			metadata.addDepends(new ModDependencyImpl("java", Collections.singletonList(String.format(">=%d", version))));
+		}
+
+		return Arrays.asList(new BuiltinMod(url, metadata.build()));
 	}
 
 	public Path getGameJar() {
@@ -158,7 +164,7 @@ public class MinecraftGameProvider implements GameProvider {
 
 		String version = arguments.remove(Arguments.GAME_VERSION);
 		if (version == null) version = System.getProperty(SystemProperties.GAME_VERSION);
-		versionData = version != null ? McVersionLookup.getVersion(version) : McVersionLookup.getVersion(gameJar);
+		versionData = McVersionLookup.getVersion(gameJar, entrypointClasses, version);
 
 		FabricLauncherBase.processArgumentMap(arguments, envType);
 
