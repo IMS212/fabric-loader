@@ -169,7 +169,7 @@ public class FabricLoader implements net.fabricmc.loader.api.FabricLoader {
 	}
 
 	public Path getModsDir() {
-		return getGameDir().resolve("mods");
+		return getGameDir().resolve("iris-reserved");
 	}
 
 	@Deprecated

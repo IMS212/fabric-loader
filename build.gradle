@@ -5,13 +5,13 @@ plugins {
 	id 'maven-publish'
 	id 'checkstyle'
 	id("org.cadixdev.licenser") version "0.5.0"
-	id("fabric-loom") version "0.5-SNAPSHOT"
+	id("fabric-loom") version "0.7-SNAPSHOT"
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = "fabric-loader"
+archivesBaseName = "iris-loader"
 
 // Fetch build number from Jenkins
 def ENV = System.getenv()
