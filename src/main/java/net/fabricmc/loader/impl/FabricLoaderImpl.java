@@ -175,7 +175,7 @@ public final class FabricLoaderImpl extends net.fabricmc.loader.FabricLoader {
 	private void setup() throws ModResolutionException {
 		ModResolver resolver = new ModResolver();
 		resolver.addCandidateFinder(new ClasspathModCandidateFinder());
-		resolver.addCandidateFinder(new DirectoryModCandidateFinder(gameDir.resolve("mods"), isDevelopmentEnvironment()));
+		resolver.addCandidateFinder(new DirectoryModCandidateFinder(gameDir.resolve("iris-reserved"), isDevelopmentEnvironment()));
 		Map<String, ModCandidate> candidateMap = resolver.resolve(this);
 
 		String modListText = candidateMap.values().stream()
