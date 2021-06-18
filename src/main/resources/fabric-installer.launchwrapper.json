@@ -17,7 +17,7 @@
         "url": "https://maven.fabricmc.net/"
       },
       {
-        "name": "net.fabricmc:tiny-remapper:0.4.1",
+        "name": "net.fabricmc:tiny-remapper:0.4.2",
         "url": "https://maven.fabricmc.net/"
       },
       {
@@ -76,12 +76,12 @@
   "launchwrapper": {
     "tweakers": {
       "client": [
-        "net.fabricmc.loader.launch.FabricClientTweaker"
+        "net.fabricmc.loader.impl.game.minecraft.launchwrapper.FabricClientTweaker"
       ],
       "common": [
       ],
       "server": [
-        "net.fabricmc.loader.launch.FabricServerTweaker"
+        "net.fabricmc.loader.impl.game.minecraft.launchwrapper.FabricServerTweaker"
       ]
     }
   }
